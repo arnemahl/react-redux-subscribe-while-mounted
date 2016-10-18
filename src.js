@@ -1,17 +1,28 @@
 
-store.injectWhileMounted = (reactComp, property) => {
-    // Ensure component has a state before initial render
-    if (!reactComp.state) {
-        reactComp.state = {};
+store.injectWhileMounted = (reactComp, oneOrMoreProps) => {
+    const properties = (
+        Array.isArray(oneOrMoreProps) && oneOrMoreProps ||
+        typeof oneOrMoreProps === 'string' && [oneOrMoreProps]
+    );
+
+    if (!properties) {
+        throw new Error(`injectWhileMounted received an invalid argument "oneOrMoreProps" of type ${typeof oneOrMoreProps}, should be string or array of strings`);
     }
 
-    // Automatically setState with specified property
+    // Automatically setState with specified properties
     reactComp.setState = reactComp.setState.bind(reactComp);
 
     const setCompState = () => {
-        reactComp.setState({
-            [property]: store.getState()[property]
-        });
+        const storeState = store.getState();
+
+        const componentStateUpdate = properties.reduce((obj, prop) => {
+            return {
+                [prop]: storeState[prop],
+                ...obj
+            };
+        }, {});
+
+        reactComp.setState(componentStateUpdate);
     };
 
     setCompState();
