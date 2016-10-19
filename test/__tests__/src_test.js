@@ -20,8 +20,7 @@ class Store {
     }
     getState = () => {
         return {
-            undef: void 0,
-            foo: 'bar'
+            foo: {}
         }
     }
 }
@@ -37,8 +36,49 @@ describe('subscribeWhileMounted', () => {
 
         console.log(component);
 
-        store.subscribeWhileMounted(component, 'undef');
+        store.subscribeWhileMounted(component, 'foo');
 
         expect(typeof component.state).toBe('object');
+    });
+
+    it('throws error when receiving parameters of invalid type', () => {
+        const getParamError = fn => {
+            try {
+                fn();
+                return 'No error';
+            } catch (error) {
+                return error.message.split('. ')[1].split(' must')[0];
+            }
+        }
+
+        const component = new Component();
+        const prop = 'foo';
+        const props = ['foo'];
+        const fn = () => {};
+
+        expect(getParamError(() => store.subscribeWhileMounted({}, 'foo'))).toBe("First parameter");
+
+        expect(getParamError(() => store.subscribeWhileMounted(component))).toBe("Second parameter");
+        expect(getParamError(() => store.subscribeWhileMounted(component, {}))).toBe("Second parameter");
+        expect(getParamError(() => store.subscribeWhileMounted(component, []))).toBe("Second parameter");
+        expect(getParamError(() => store.subscribeWhileMounted(component, [null]))).toBe("Second parameter");
+
+        expect(getParamError(() => store.subscribeWhileMounted(component, prop, null))).toBe("Third parameter");
+        expect(getParamError(() => store.subscribeWhileMounted(component, props, {}))).toBe("Third parameter");
+    });
+
+    it('throws error when subscribing to missing props', () => {
+        const getError = (fn) => {
+            try {
+                fn();
+                return 'No error';
+            } catch (error) {
+                return 'Error';
+            }
+        };
+        const component = new Component();
+
+        expect(getError(() => store.subscribeWhileMounted(component, '404'))).toBe('Error');
+        expect(getError(() => store.subscribeWhileMounted(component, ['foo', '404']))).toBe('Error');
     });
 });
