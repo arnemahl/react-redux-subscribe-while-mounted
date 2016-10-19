@@ -27,8 +27,6 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
         Array.isArray(oneOrMoreProps) && oneOrMoreProps ||
         typeof oneOrMoreProps === 'string' && [oneOrMoreProps]
     );
-    console.log('oneOrMoreProps:', oneOrMoreProps); // DEBUG
-    console.log('properties:', properties); // DEBUG
 
     // Check that all properties to subscribe to exist in store's state
     const initStoreState = store.getState();
@@ -37,7 +35,6 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
     if (properties.some(propIsMissing)) {
         const missingProps = properties.filter(propIsMissing);
         const single = missingProps.length === 1;
-        console.log('missingProps:', missingProps); // DEBUG
 
         throw new Error(
             `${packageName} can only subscribe to changes from the store's reducers. ` +
@@ -57,7 +54,7 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
         const storeState = store.getState();
 
         const updates = Object.keys(storeState)
-            .filter(key => oneOrMoreProps.indexOf(key) !== -1)
+            .filter(key => properties.indexOf(key) !== -1)
             .filter(key => {
                 const isUpdated = lastStates[key] !== storeState[key];
 
@@ -65,7 +62,7 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
 
                 return isUpdated;
             })
-            .map((obj, key) => {
+            .reduce((obj, key) => {
                 return {
                     ...obj,
                     [key]: storeState[key]

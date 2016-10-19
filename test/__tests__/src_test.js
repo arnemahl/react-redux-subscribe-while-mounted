@@ -20,7 +20,9 @@ class Store {
     }
     getState = () => {
         return {
-            foo: {}
+            foo: {
+                data: 'bar'
+            }
         }
     }
 }
@@ -80,5 +82,13 @@ describe('subscribeWhileMounted', () => {
 
         expect(getError(() => store.subscribeWhileMounted(component, '404'))).toBe('Error');
         expect(getError(() => store.subscribeWhileMounted(component, ['foo', '404']))).toBe('Error');
+    });
+
+    it ('sets component state with correct initial state', () => {
+        const component = new Component();
+
+        store.subscribeWhileMounted(component, 'foo');
+
+        expect(component.state.foo.data).toBe('bar');
     });
 });
