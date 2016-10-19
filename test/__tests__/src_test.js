@@ -127,4 +127,18 @@ describe('subscribeWhileMounted', () => {
 
         expect(component.state.foo.data).toBe('bar');
     });
+
+    it('calls original componentWillUnmount', () => {
+        const store = new Store();
+        const component = new Component();
+
+        let ans = 'it did not get called';
+
+        component.componentWillUnmount = () => ans = 'it got called';
+
+        store.subscribeWhileMounted(component, 'foo');
+        component.componentWillUnmount();
+
+        expect(ans).toBe('it got called');
+    });
 });
