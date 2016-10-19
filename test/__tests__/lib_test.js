@@ -1,6 +1,6 @@
-jest.unmock('../../src/index.js');
+jest.unmock('../../lib/index.js');
 
-import createMethod_subscribeWhileMounted from '../../src';
+import createMethod_subscribeWhileMounted from '../../lib';
 
 class Component {
     setState = (state) => {
@@ -39,7 +39,7 @@ class Store {
     }
 }
 
-describe('subscribeWhileMounted (src)', () => {
+describe('subscribeWhileMounted (lib)', () => {
 
     it('always ensures component has state', () => {
         const store = new Store();
