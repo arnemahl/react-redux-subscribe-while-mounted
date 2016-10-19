@@ -141,4 +141,17 @@ describe('subscribeWhileMounted', () => {
 
         expect(ans).toBe('it got called');
     });
+
+    it('allows specifying another callback fuction', () => {
+        const store = new Store();
+        const component = new Component();
+
+        let state;
+
+        const callback = (_state) => state = _state;
+
+        store.subscribeWhileMounted(component, 'foo', callback);
+
+        expect(state.foo.data).toBe('bar');
+    });
 });
