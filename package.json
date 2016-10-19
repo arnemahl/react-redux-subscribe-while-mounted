@@ -1,7 +1,7 @@
 {
-  "name": "INSERT_NAME",
+  "name": "react-redux-subscribe-while-mounted",
   "version": "0.0.1",
-  "description": "INSERT_NAME is INSERT_DESCRIPTION",
+  "description": "This is a uitility to make it easier to subscribe to a Redux store from React components",
   "main": "lib/index.js",
   "scripts": {
     "build": "./node_modules/babel-cli/bin/babel.js src -d lib",
@@ -19,17 +19,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/arnemahl/INSERT_NAME.git"
+    "url": "git+https://github.com/arnemahl/react-redux-subscribe-while-mounted.git"
   },
   "keywords": [
-    "INSERT_KEYWORDS"
+    "redux",
+    "react",
+    "componentWillMount",
+    "subscribeWhileMounted"
   ],
   "author": "Arne Mæhlum <arne.mahlum@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/arnemahl/INSERT_NAME/issues"
+    "url": "https://github.com/arnemahl/react-redux-subscribe-while-mounted/issues"
   },
-  "homepage": "https://github.com/arnemahl/INSERT_NAME#readme",
+  "homepage": "https://github.com/arnemahl/react-redux-subscribe-while-mounted#readme",
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-jest": "^13.0.0",
