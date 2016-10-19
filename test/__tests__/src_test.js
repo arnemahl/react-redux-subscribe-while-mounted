@@ -18,11 +18,6 @@ class Store {
             this.subscribers = this.subscribers.filter(f => f !== fn);
         }
     }
-    state = {
-        foo: {
-            data: 'bar'
-        }
-    }
     getState = () => {
         return this.state;
     }
@@ -34,18 +29,21 @@ class Store {
         };
         this.subscribers.forEach(fn => fn());
     }
+    constructor() {
+        this.state = {
+            foo: {
+                data: 'bar'
+            }
+        }
+        this.subscribeWhileMounted = createMethod_subscribeWhileMounted(this);
+    }
 }
-
-const store = new Store();
-
-store.subscribeWhileMounted = createMethod_subscribeWhileMounted(store);
 
 describe('subscribeWhileMounted', () => {
 
     it('always ensures component has state', () => {
+        const store = new Store();
         const component = new Component();
-
-        console.log(component);
 
         store.subscribeWhileMounted(component, 'foo');
 
@@ -62,7 +60,9 @@ describe('subscribeWhileMounted', () => {
             }
         }
 
+        const store = new Store();
         const component = new Component();
+
         const prop = 'foo';
         const props = ['foo'];
         const fn = () => {};
@@ -87,6 +87,7 @@ describe('subscribeWhileMounted', () => {
                 return 'Error';
             }
         };
+        const store = new Store();
         const component = new Component();
 
         expect(getError(() => store.subscribeWhileMounted(component, '404'))).toBe('Error');
@@ -94,6 +95,7 @@ describe('subscribeWhileMounted', () => {
     });
 
     it('sets component state with correct initial state', () => {
+        const store = new Store();
         const component = new Component();
 
         store.subscribeWhileMounted(component, 'foo');
@@ -102,11 +104,27 @@ describe('subscribeWhileMounted', () => {
     });
 
     it('updates component state correctly upon change', () => {
+        const store = new Store();
         const component = new Component();
 
         store.subscribeWhileMounted(component, 'foo');
         store.changeState();
 
         expect(component.state.foo.data).toBe('new value');
+    });
+
+    it('unsubscribes on componentWillUnmount', () => {
+        const store = new Store();
+        const component = new Component();
+
+        store.subscribeWhileMounted(component, 'foo');
+
+        expect(component.state.foo.data).toBe('bar');
+
+        component.componentWillUnmount();
+
+        store.changeState();
+
+        expect(component.state.foo.data).toBe('bar');
     });
 });
