@@ -2,7 +2,7 @@
 
 TODO:
 
-* Write tests
+* ~~Write tests~~
 * Test in a project
 * write README and API
 * Publish to npm
