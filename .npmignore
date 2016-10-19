@@ -1,0 +1,8 @@
+logo/
+test/
+usage-examples/
+.travis.yml
+.npmignore
+API.md
+CONTRIBUTING.md
+TODO.md

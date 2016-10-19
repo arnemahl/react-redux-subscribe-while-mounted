@@ -1,0 +1,42 @@
+{
+  "name": "INSERT_NAME",
+  "version": "0.0.1",
+  "description": "INSERT_NAME is INSERT_DESCRIPTION",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "./node_modules/babel-cli/bin/babel.js src -d lib",
+    "prepublish": "npm run test && npm run build",
+    "test": "jest"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-class-properties",
+      "transform-object-rest-spread"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arnemahl/INSERT_NAME.git"
+  },
+  "keywords": [
+    "INSERT_KEYWORDS"
+  ],
+  "author": "Arne Mæhlum <arne.mahlum@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arnemahl/INSERT_NAME/issues"
+  },
+  "homepage": "https://github.com/arnemahl/INSERT_NAME#readme",
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-jest": "^13.0.0",
+    "babel-plugin-transform-class-properties": "^6.10.2",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-es2015": "^6.9.0",
+    "jest-cli": "^13.0.0"
+  }
+}
