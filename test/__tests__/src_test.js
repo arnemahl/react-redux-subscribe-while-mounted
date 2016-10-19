@@ -18,12 +18,21 @@ class Store {
             this.subscribers = this.subscribers.filter(f => f !== fn);
         }
     }
-    getState = () => {
-        return {
-            foo: {
-                data: 'bar'
-            }
+    state = {
+        foo: {
+            data: 'bar'
         }
+    }
+    getState = () => {
+        return this.state;
+    }
+    changeState = (state) => {
+        this.state = {
+            foo: {
+                data: 'new value'
+            }
+        };
+        this.subscribers.forEach(fn => fn());
     }
 }
 
@@ -84,11 +93,20 @@ describe('subscribeWhileMounted', () => {
         expect(getError(() => store.subscribeWhileMounted(component, ['foo', '404']))).toBe('Error');
     });
 
-    it ('sets component state with correct initial state', () => {
+    it('sets component state with correct initial state', () => {
         const component = new Component();
 
         store.subscribeWhileMounted(component, 'foo');
 
         expect(component.state.foo.data).toBe('bar');
+    });
+
+    it('updates component state correctly upon change', () => {
+        const component = new Component();
+
+        store.subscribeWhileMounted(component, 'foo');
+        store.changeState();
+
+        expect(component.state.foo.data).toBe('new value');
     });
 });
