@@ -13,13 +13,13 @@ const validCallback = oneOfType([ undef, func ]);
 module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
     // Validate input
     if (!validReactComponent(reactComp)) {
-        throw new Error(`${packageName} received a first parameter of type '${typeof reactComp}'. First parameter must be a React Component.`);
+        throw new Error(`${packageName} received a first argument of type '${typeof reactComp}'. First argument must be a React Component.`);
     }
     if (!validProps(oneOrMoreProps)) {
-        throw new Error(`${packageName} received a second parameter of type '${typeof oneOrMoreProps}'. Second parameter must be string or array of strings.`);
+        throw new Error(`${packageName} received a second argument of type '${typeof oneOrMoreProps}'. Second argument must be string or array of strings.`);
     }
     if (!validCallback(optionalCallback)) {
-        throw new Error(`${packageName} received a third parameter of type '${typeof optionalCallback}'. Third parameter must be undefinded or function.`);
+        throw new Error(`${packageName} received a third argument of type '${typeof optionalCallback}'. Third argument must be undefinded or function.`);
     }
 
     // Decide properties

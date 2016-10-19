@@ -41,8 +41,8 @@ describe('subscribeWhileMounted', () => {
         expect(typeof component.state).toBe('object');
     });
 
-    it('throws error when receiving parameters of invalid type', () => {
-        const getParamError = fn => {
+    it('throws error when receiving arguments of invalid type', () => {
+        const getArgumentError = fn => {
             try {
                 fn();
                 return 'No error';
@@ -56,15 +56,15 @@ describe('subscribeWhileMounted', () => {
         const props = ['foo'];
         const fn = () => {};
 
-        expect(getParamError(() => store.subscribeWhileMounted({}, 'foo'))).toBe("First parameter");
+        expect(getArgumentError(() => store.subscribeWhileMounted({}, 'foo'))).toBe("First argument");
 
-        expect(getParamError(() => store.subscribeWhileMounted(component))).toBe("Second parameter");
-        expect(getParamError(() => store.subscribeWhileMounted(component, {}))).toBe("Second parameter");
-        expect(getParamError(() => store.subscribeWhileMounted(component, []))).toBe("Second parameter");
-        expect(getParamError(() => store.subscribeWhileMounted(component, [null]))).toBe("Second parameter");
+        expect(getArgumentError(() => store.subscribeWhileMounted(component))).toBe("Second argument");
+        expect(getArgumentError(() => store.subscribeWhileMounted(component, {}))).toBe("Second argument");
+        expect(getArgumentError(() => store.subscribeWhileMounted(component, []))).toBe("Second argument");
+        expect(getArgumentError(() => store.subscribeWhileMounted(component, [null]))).toBe("Second argument");
 
-        expect(getParamError(() => store.subscribeWhileMounted(component, prop, null))).toBe("Third parameter");
-        expect(getParamError(() => store.subscribeWhileMounted(component, props, {}))).toBe("Third parameter");
+        expect(getArgumentError(() => store.subscribeWhileMounted(component, prop, null))).toBe("Third argument");
+        expect(getArgumentError(() => store.subscribeWhileMounted(component, props, {}))).toBe("Third argument");
     });
 
     it('throws error when subscribing to missing props', () => {
