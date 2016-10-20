@@ -50,7 +50,7 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
 
     // Notifier function
     const notifyOfUpdates = properties
-        ? getMethodToNotifyOnUpdatesToSelectedProperties(store, properties, callback)
+        ? getMethodToNotifyOnUpdatesToSelectedProperties(store, properties, callback, !!optionalCallback)
         : getMethodToNotifyOnAnyUpdates(store, callback);
 
     // Notify callback once and on each update
@@ -61,7 +61,7 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
     reactComp.componentWillUnmount = getNewComponentWillUnmount(unsubscribe, reactComp.componentWillUnmount);
 };
 
-function getMethodToNotifyOnUpdatesToSelectedProperties(store, properties, callback) {
+function getMethodToNotifyOnUpdatesToSelectedProperties(store, properties, callback, passEntireStateAsSecondArgument) {
     let lastStates = {};
 
     return () => {
@@ -84,7 +84,11 @@ function getMethodToNotifyOnUpdatesToSelectedProperties(store, properties, callb
             }, {});
 
         if (Object.keys(updates).length !== 0) {
-            callback(updates, storeState);
+            if (passEntireStateAsSecondArgument) {
+                callback(updates, storeState);
+            } else {
+                callback(updates);
+            }
         }
     }
 }
