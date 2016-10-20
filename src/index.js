@@ -58,7 +58,8 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
     const unsubscribe = store.subscribe(notifyOfUpdates);
 
     // Automatically un-subscribe before un-mounting
-    reactComp.componentWillUnmount = getNewComponentWillUnmount(unsubscribe, reactComp.componentWillUnmount);
+    const {componentWillUnmount: cwun} = reactComp;
+    reactComp.componentWillUnmount = getNewComponentWillUnmount(unsubscribe, cwun ? cwun.bind(reactComp) : () => {});
 };
 
 function getMethodToNotifyOnUpdatesToSelectedProperties(store, properties, callback, passEntireStateAsSecondArgument) {

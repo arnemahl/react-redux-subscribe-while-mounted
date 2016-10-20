@@ -141,18 +141,21 @@ describe('subscribeWhileMounted (src)', () => {
         expect(component.state.foo.data).toBe('bar');
     });
 
-    it('calls original componentWillUnmount', () => {
+    it('calls original componentWillUnmount correctly', () => {
+        class CwunComponent extends Component {
+            didUnmount = 'did not unmount'
+            componentWillUnmount() {
+                this.didUnmount = 'did unmount';
+            }
+        }
+
         const store = new Store();
-        const component = new Component();
-
-        let ans = 'it did not get called';
-
-        component.componentWillUnmount = () => ans = 'it got called';
+        const component = new CwunComponent();
 
         store.subscribeWhileMounted(component, 'foo');
         component.componentWillUnmount();
 
-        expect(ans).toBe('it got called');
+        expect(component.didUnmount).toBe('did unmount');
     });
 
     it('allows specifying another callback fuction', () => {
