@@ -1,4 +1,4 @@
-# react-redux-subscribe-while-mounted
+# react-redux-subscribe-while-mounted [![Build Status](https://img.shields.io/travis/arnemahl/react-redux-subscribe-while-mounted/master.svg?style=flat)](https://travis-ci.org/arnemahl/react-redux-subscribe-while-mounted) [![npm version](https://img.shields.io/npm/v/react-redux-subscribe-while-mounted.svg?style=flat)](https://www.npmjs.com/package/react-redux-subscribe-while-mounted)
 
 A utility method to make it easier to subscribe to a Redux store from a React component.
 
