@@ -1,6 +1,6 @@
 # react-redux-subscribe-while-mounted
 
-This is a utility method to make it easier to subscribe to a Redux store from a React component.
+A utility method to make it easier to subscribe to a Redux store from a React component.
 
 *Coming right up:*
 

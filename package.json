@@ -1,7 +1,7 @@
 {
   "name": "react-redux-subscribe-while-mounted",
   "version": "0.1.0",
-  "description": "This is a uitility to make it easier to subscribe to a Redux store from React components",
+  "description": "A uitility to make it easier to subscribe to a Redux store from React components",
   "main": "lib/index.js",
   "scripts": {
     "build": "./node_modules/babel-cli/bin/babel.js src -d lib",
@@ -25,7 +25,19 @@
     "redux",
     "react",
     "componentWillMount",
-    "subscribeWhileMounted"
+    "subscribeWhileMounted",
+    "subscribe",
+    "while",
+    "mounted",
+    "component",
+    "store",
+    "automatically",
+    "unsubscribe",
+    "setState",
+    "on change",
+    "specific",
+    "props",
+    "properties"
   ],
   "author": "Arne Mæhlum <arne.mahlum@gmail.com>",
   "license": "ISC",
