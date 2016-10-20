@@ -7,7 +7,7 @@ This package contains only one methods, however it can be called with different 
 
 `new subscribeWhileMounted(reactComponent[, oneOrMorePropNames[, callback]])`
 
-#### Parameters
+### Parameters
 
 * **reactComponent:** Must be a React component (or at least it must have a `setState` function, if you want to get hacky)
 * **oneOrMorePropNames:** _Optional_. Name the property or properties you want to subscribe to. See [Second argument](#second-argument) for details.
@@ -16,7 +16,7 @@ This package contains only one methods, however it can be called with different 
     * **entireState:** An object containing the entire store state (this argument is omitted if *oneOrMorePropNames* is undefined).
 
 
-#### Second argument
+### Second argument
 
 The second argument passed to `subscribeWhileMounted` must be either undefined (either omitted or by passing `void 0`) or a string or an array of strings.
 
@@ -28,6 +28,6 @@ If the second argument is a string or an array of strings, each string must be n
 `subscribeWhileMounted` is retroactive, and will call the callback at least once before it returns.
 
 
-#### Examples
+## Examples
 
 Check out the [Examples](EXAMPLES.md) for different ways to use `subscribeWhileMounted`.

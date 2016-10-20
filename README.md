@@ -19,8 +19,10 @@ A utility method to make it easier to subscribe to a Redux store from a React co
 
 ## Installation
 
-```shell
-npm install react-redux-subscribe-while-mounted
+Available through npm:
+
+```
+npm install react-redux-subscribe-while-mounted --save
 ```
 
 
@@ -49,7 +51,7 @@ class MyComponent extends React.Component {
 }
 ```
 
-**Step 3:**
+**Step 3:** Variations
 
 `subscribeWhileMounted` can be called with different parameters, see the [API documentation](API.md) for further explanation. For different ways to use `subscribeWhileMounted`, see the [Examples](EXAMPLES.md).
 
@@ -71,9 +73,9 @@ These features means that you can write less, more readable code to subscribe to
 
 As a side effetc, because subscribing to the store is typically a bit tedious, we often pass the state as props between components. The simpler syntax removes the need for that.
 
-    * By not passing store state as props from component to component we reduce noise in the code, making the remaining code more readable.
-    * By explicitly listening to the (relevant parts of) the store in the components that need it, we express a more explicit relationship between the definition of the data (in the store) and the presetation of it (in the React component).
-    * You might also decide to move more state management into the store/actions, which is a great thing, because that is what Redux is for!
+* By not passing store state as props from component to component we reduce noise in the code, making the remaining code more readable.
+* By explicitly listening to the (relevant parts of) the store in the components that need it, we express a more explicit relationship between the definition of the data (in the store) and the presetation of it (in the React component).
+* You might also decide to move more state management into the store/actions, which is a great thing, because that is what Redux is for!
 
 
 ## Inspiration
