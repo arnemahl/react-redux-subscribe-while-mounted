@@ -203,4 +203,26 @@ describe('subscribeWhileMounted (lib)', () => {
         store.changeState();
         expect(lastUpdate).toBe('not called again');
     });
+
+    it('passes entire state as a second argument to callback', () => {
+        const store = new Store();
+        const component = new Component();
+
+        let state;
+        let entireState;
+
+        const callback = (_state, _entireState) => {
+            state = _state;
+            entireState = _entireState;
+
+            expect(!!entireState ? 'present' : 'absent').toBe('present');
+        }
+
+        store.subscribeWhileMounted(component, ['foo', 'lol'], callback);
+        store.changeState();
+
+        expect(state.foo.data).toBe('new value');
+        expect(state.lol).toBe(void 0);
+        expect(entireState.lol.data).toBe(':D');
+    });
 });

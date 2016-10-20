@@ -49,36 +49,25 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
         : reactComp.setState.bind(reactComp);
 
     // Notifier function
-    const getUpdates = properties ? getMethodToGetUpdates(store, properties) : store.getState;
-
-    const notifyOfUpdates = () => {
-        const updates = getUpdates();
-
-        if (Object.keys(updates).length !== 0) {
-            callback(updates);
-        }
-    };
+    const notifyOfUpdates = properties
+        ? getMethodToNotifyOnUpdatesToSelectedProperties(store, properties, callback)
+        : getMethodToNotifyOnAnyUpdates(store, callback);
 
     // Notify callback once and on each update
     notifyOfUpdates();
     const unsubscribe = store.subscribe(notifyOfUpdates);
 
     // Automatically un-subscribe before un-mounting
-    const cwun_original = reactComp.componentWillUnmount;
-
-    reactComp.componentWillUnmount = () => {
-        unsubscribe();
-        cwun_original && cwun_original();
-    };
+    reactComp.componentWillUnmount = getNewComponentWillUnmount(unsubscribe, reactComp.componentWillUnmount);
 };
 
-function getMethodToGetUpdates(store, properties) {
+function getMethodToNotifyOnUpdatesToSelectedProperties(store, properties, callback) {
     let lastStates = {};
 
     return () => {
         const storeState = store.getState();
 
-        return Object.keys(storeState)
+        const updates = Object.keys(storeState)
             .filter(key => properties.indexOf(key) !== -1)
             .filter(key => {
                 const isUpdated = lastStates[key] !== storeState[key];
@@ -93,5 +82,16 @@ function getMethodToGetUpdates(store, properties) {
                     [key]: storeState[key]
                 }
             }, {});
+
+        if (Object.keys(updates).length !== 0) {
+            callback(updates, storeState);
+        }
     }
 }
+
+const getMethodToNotifyOnAnyUpdates = (store, callback) => () => callback(store.getState());
+
+const getNewComponentWillUnmount = (unsubscribe, componentWillUnmount) => () => {
+    unsubscribe();
+    componentWillUnmount && componentWillUnmount();
+};
