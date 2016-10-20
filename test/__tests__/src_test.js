@@ -186,4 +186,21 @@ describe('subscribeWhileMounted (src)', () => {
         expect(lastUpdate.foo.data).toBe('new value');
         expect(lastUpdate.lol).toBe(void 0);
     });
+
+    it('only fires callback when there are updates', () => {
+
+        const store = new Store();
+        const component = new Component();
+
+        let lastUpdate;
+
+        const callback = (updates) => lastUpdate = updates;
+
+        store.subscribeWhileMounted(component, 'lol', callback);
+        expect(lastUpdate.lol.data).toBe(':D');
+
+        lastUpdate = 'not called again';
+        store.changeState();
+        expect(lastUpdate).toBe('not called again');
+    });
 });
