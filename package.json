@@ -1,6 +1,6 @@
 {
   "name": "react-redux-subscribe-while-mounted",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "This is a uitility to make it easier to subscribe to a Redux store from React components",
   "main": "lib/index.js",
   "scripts": {
