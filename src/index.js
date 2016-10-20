@@ -6,7 +6,7 @@ const undef = (value) => typeof value === 'undefined';
 const nonEmptyArrayOf = (validator) => (array) => Array.isArray(array) && array.length !== 0 && array.every(v => validator(v));
 const oneOfType = (possibleTypes) => (value) => possibleTypes.some(type => type(value));
 
-const validReactComponent = comp => comp && comp.constructor && comp.constructor.name === 'Component' && func(comp.setState);
+const validReactComponent = comp => comp && func(comp.setState) && oneOfType([undef, func])(comp.componentWillUnmount);
 const validProps = oneOfType([ undef, string, nonEmptyArrayOf(string)] );
 const validCallback = oneOfType([ undef, func ]);
 
