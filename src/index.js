@@ -7,7 +7,7 @@ const nonEmptyArrayOf = (validator) => (array) => Array.isArray(array) && array.
 const oneOfType = (possibleTypes) => (value) => possibleTypes.some(type => type(value));
 
 const validReactComponent = comp => comp && comp.constructor && comp.constructor.name === 'Component' && func(comp.setState);
-const validProps = oneOfType([ string, nonEmptyArrayOf(string)] );
+const validProps = oneOfType([ undef, string, nonEmptyArrayOf(string)] );
 const validCallback = oneOfType([ undef, func ]);
 
 module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
@@ -16,23 +16,24 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
         throw new Error(`${packageName} received a first argument of type '${typeof reactComp}'. First argument must be a React Component.`);
     }
     if (!validProps(oneOrMoreProps)) {
-        throw new Error(`${packageName} received a second argument of type '${typeof oneOrMoreProps}'. Second argument must be string or array of strings.`);
+        throw new Error(`${packageName} received a second argument of type '${typeof oneOrMoreProps}'. Second argument must be a string, an array of strings or undefined.`);
     }
     if (!validCallback(optionalCallback)) {
-        throw new Error(`${packageName} received a third argument of type '${typeof optionalCallback}'. Third argument must be undefinded or function.`);
+        throw new Error(`${packageName} received a third argument of type '${typeof optionalCallback}'. Third argument must be a function or undefinded.`);
     }
 
     // Decide properties
     const properties = (
         Array.isArray(oneOrMoreProps) && oneOrMoreProps ||
-        typeof oneOrMoreProps === 'string' && [oneOrMoreProps]
+        typeof oneOrMoreProps === 'string' && [oneOrMoreProps] ||
+        typeof oneOrMoreProps === 'undefined' && false
     );
 
     // Check that all properties to subscribe to exist in store's state
     const initStoreState = store.getState();
     const propIsMissing = prop => typeof initStoreState[prop] !== 'object';
 
-    if (properties.some(propIsMissing)) {
+    if (properties && properties.some(propIsMissing)) {
         const missingProps = properties.filter(propIsMissing);
         const single = missingProps.length === 1;
 
@@ -48,26 +49,10 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
         : reactComp.setState.bind(reactComp);
 
     // Notifier function
-    let lastStates = {};
+    const getUpdates = properties ? getMethodToGetUpdates(store, properties) : store.getState;
 
     const notifyOfUpdates = () => {
-        const storeState = store.getState();
-
-        const updates = Object.keys(storeState)
-            .filter(key => properties.indexOf(key) !== -1)
-            .filter(key => {
-                const isUpdated = lastStates[key] !== storeState[key];
-
-                lastStates[key] === storeState[key];
-
-                return isUpdated;
-            })
-            .reduce((obj, key) => {
-                return {
-                    ...obj,
-                    [key]: storeState[key]
-                }
-            }, {});
+        const updates = getUpdates();
 
         if (Object.keys(updates).length !== 0) {
             callback(updates);
@@ -86,3 +71,26 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
         cwun_original && cwun_original();
     };
 };
+
+function getMethodToGetUpdates(store, properties) {
+    return () => {
+        const storeState = store.getState();
+        let lastStates = {};
+
+        return Object.keys(storeState)
+            .filter(key => properties.indexOf(key) !== -1)
+            .filter(key => {
+                const isUpdated = lastStates[key] !== storeState[key];
+
+                lastStates[key] === storeState[key];
+
+                return isUpdated;
+            })
+            .reduce((obj, key) => {
+                return {
+                    ...obj,
+                    [key]: storeState[key]
+                }
+            }, {});
+    }
+}

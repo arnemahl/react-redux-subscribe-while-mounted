@@ -69,7 +69,7 @@ describe('subscribeWhileMounted (lib)', () => {
 
         expect(getArgumentError(() => store.subscribeWhileMounted({}, 'foo'))).toBe("First argument");
 
-        expect(getArgumentError(() => store.subscribeWhileMounted(component))).toBe("Second argument");
+        expect(getArgumentError(() => store.subscribeWhileMounted(component, 13))).toBe("Second argument");
         expect(getArgumentError(() => store.subscribeWhileMounted(component, {}))).toBe("Second argument");
         expect(getArgumentError(() => store.subscribeWhileMounted(component, []))).toBe("Second argument");
         expect(getArgumentError(() => store.subscribeWhileMounted(component, [null]))).toBe("Second argument");
@@ -92,6 +92,15 @@ describe('subscribeWhileMounted (lib)', () => {
 
         expect(getError(() => store.subscribeWhileMounted(component, '404'))).toBe('Error');
         expect(getError(() => store.subscribeWhileMounted(component, ['foo', '404']))).toBe('Error');
+    });
+
+    it('can omit property filter (subscribe to everything, always pass entire state)', () => {
+        const store = new Store();
+        const component = new Component();
+
+        store.subscribeWhileMounted(component);
+
+        expect(component.state.foo.data).toBe('bar');
     });
 
     it('sets component state with correct initial state', () => {
