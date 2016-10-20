@@ -73,16 +73,17 @@ module.exports = store => (reactComp, oneOrMoreProps, optionalCallback) => {
 };
 
 function getMethodToGetUpdates(store, properties) {
+    let lastStates = {};
+
     return () => {
         const storeState = store.getState();
-        let lastStates = {};
 
         return Object.keys(storeState)
             .filter(key => properties.indexOf(key) !== -1)
             .filter(key => {
                 const isUpdated = lastStates[key] !== storeState[key];
 
-                lastStates[key] === storeState[key];
+                lastStates[key] = storeState[key];
 
                 return isUpdated;
             })

@@ -23,6 +23,7 @@ class Store {
     }
     changeState = (state) => {
         this.state = {
+            ...this.state,
             foo: {
                 data: 'new value'
             }
@@ -33,8 +34,11 @@ class Store {
         this.state = {
             foo: {
                 data: 'bar'
+            },
+            lol: {
+                data: ':D'
             }
-        }
+        };
         this.subscribeWhileMounted = createMethod_subscribeWhileMounted(this);
     }
 }
@@ -162,5 +166,24 @@ describe('subscribeWhileMounted (src)', () => {
         store.subscribeWhileMounted(component, 'foo', callback);
 
         expect(state.foo.data).toBe('bar');
+    });
+
+    it('only passes updated props to callback', () => {
+        const store = new Store();
+        const component = new Component();
+
+        let lastUpdate;
+
+        const callback = (updates) => lastUpdate = updates;
+
+        store.subscribeWhileMounted(component, ['foo', 'lol'], callback);
+
+        expect(lastUpdate.foo.data).toBe('bar');
+        expect(lastUpdate.lol.data).toBe(':D');
+
+        store.changeState();
+
+        expect(lastUpdate.foo.data).toBe('new value');
+        expect(lastUpdate.lol).toBe(void 0);
     });
 });
