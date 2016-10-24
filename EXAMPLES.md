@@ -51,9 +51,11 @@ Similar to [Subscribing to a specific property](#subscribing-to-a-specific-prope
 ### Subscribing with a custom callback: renaming properties
 
 ```js
-store.subscribeWhileMounted(this, 'foo', ({foo}) => {
-    this.setState({
-        anotherName: foo
+componentWillMount() {
+    store.subscribeWhileMounted(this, 'foo', ({foo}) => {
+        this.setState({
+            anotherName: foo
+        });
     });
 }
 render() {
@@ -73,7 +75,7 @@ store.subscribeWhileMounted(this, 'foo', ({foo}) => {
     }
 
     this.setState({ foo });
-}
+});
 ```
 
 This code checks whether the updated state of `foo` implies a need to dispatch an action, and does so if necessary. (On each update, the component sets `foo` to it's state.)
@@ -97,7 +99,7 @@ store.subscribeWhileMounted(this, ['foo', 'bar'], (updates, state) => {
             foobar: null
         });
     }
-}
+});
 ```
 
 This code creates a state `foobar` based on the state of `foo` and `bar`. This can sometimes be handled in the reducers alone, but in some cases that gets overly complicated. This method provides a simple alternative.
